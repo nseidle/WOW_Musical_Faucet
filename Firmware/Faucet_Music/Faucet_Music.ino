@@ -6,7 +6,10 @@
  License: This code is public domain but you buy me a beer if you use this and we meet someday (Beerware license).
 
  We read the sensor from an off the shelf 'hands free faucet' and playing music each time we detect hands.
- 
+
+ Runs on SparkFun RedBoard Plus: https://www.sparkfun.com/products/18158
+ and the MP3 Shield: https://www.sparkfun.com/products/12660
+
  Faucet:
  Green -> A0
  Yellow -> D5 - It was 5V then we needed to power cycle/reset the faucet
@@ -30,15 +33,13 @@
 */
 
 //Include various libraries
-#include <SPI.h> //SPI library
-#include <SdFat.h> //SDFat Library
-#include <SdFatUtil.h> //SDFat Util Library
-#include <SFEMP3Shield.h> //Mp3 Shield Library
-#include <avr/wdt.h> //We need watch dog for this program
+#include <SdFat.h> //SDFat Library - http://librarymanager/All#sdfat_exfat by Bill Greiman
 
+#include <vs1053_SdFat.h> //Mp3 Shield Library - http://librarymanager/All#VS1053_sdFat by Michael Flaga
+vs1053 MP3player; //Create MP3 library object
 SdFat sd; //Create object to handle SD functions
 
-SFEMP3Shield MP3player; //Create MP3 library object
+#include <avr/wdt.h> //We need watch dog for this program
 
 //Hardware definitions
 const byte faucetSensor = A0;
@@ -56,7 +57,7 @@ void setup()
   wdt_reset(); //Pet the dog
   wdt_disable(); //We don't want the watchdog during init
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   
   randomSeed(analogRead(A2)); //Feed the ether into the random number generator
   
@@ -87,8 +88,8 @@ void loop()
 
   int sensor = analogRead(faucetSensor);
   
-  //Serial.print("Faucet: ");
-  //Serial.println(sensor);
+  Serial.print("Faucet: ");
+  Serial.println(sensor);
   
   if(playerStopped == true && sensor < 900)
   {
@@ -188,4 +189,3 @@ void initMP3Player()
 
   MP3player.setMonoMode(1); // Mono setting: 0=off, 1 = on, 3=max
 }
-
