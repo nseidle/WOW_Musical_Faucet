@@ -5,6 +5,9 @@
  Date: June 11th, 2015
  License: This code is public domain but you buy me a beer if you use this and we meet someday (Beerware license).
 
+  Dec 16, 2024 - Unit reported not working. Updated code. Tested, works fine. May have been
+  a corroded power connection between shields.  
+
  We read the sensor from an off the shelf 'hands free faucet' and playing music each time we detect hands.
 
  Runs on SparkFun RedBoard Plus: https://www.sparkfun.com/products/18158
@@ -90,8 +93,9 @@ void loop()
   
   Serial.print("Faucet: ");
   Serial.println(sensor);
+  delay(100);
   
-  if(playerStopped == true && sensor < 900)
+  if(playerStopped == true && sensor < 990)
   {
     Serial.println("Hands!");
     
